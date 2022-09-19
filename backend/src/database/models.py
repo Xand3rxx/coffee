@@ -124,5 +124,11 @@ class Drink(db.Model):
     def update(self):
         db.session.commit()
 
+    '''
+    Rollbacks a drink POST transaction
+    '''
+    def rollback(self):
+        db.session.rollback()
+
     def __repr__(self):
         return json.dumps(self.short())
