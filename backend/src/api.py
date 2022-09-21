@@ -27,16 +27,17 @@ class AuthError(Exception):
 db_drop_and_create_all()
 
 # Function for returning all drinks from the `drink` table with the long format representation. 
-
-
 def get_long_drinks():
     return [drink.long() for drink in Drink.query.all()]
 
 # Function to check if a record exists in a table. 
-
-
 def check_if_records_exists(model):
     if len(model) == 0:
+        abort(404)
+
+# Function to check if a drink exist on the `drink` table. 
+def check_if_drink_exists(drink):
+    if drink is None:
         abort(404)
 
 
@@ -135,10 +136,9 @@ def create_drink(payload):
 @requires_auth('patch:drinks')
 def update_drink(payload, drink_id):
     drink = Drink.query.get(drink_id)
-    if drink is None:
-        abort(404)
-
+    check_if_drink_exists(drink)
     body = request.get_json()
+
     if 'title' and 'recipe' not in body:
         abort(422)
 
@@ -172,10 +172,8 @@ def update_drink(payload, drink_id):
 @app.route('/drinks/<int:drink_id>', methods=['DELETE'])
 @requires_auth('delete:drinks')
 def delete_drink(payload, drink_id):
-
     drink = Drink.query.get(drink_id)
-    if drink is None:
-        abort(404)
+    check_if_drink_exists(drink)
 
     try:
         drink.delete()
