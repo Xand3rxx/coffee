@@ -2,7 +2,7 @@
 
 ### Important For Reviewer
 
-Kindly provide the secrets for the database and Auth0 configurations `.env` file of the [backend](./backend/.env) folder. 
+Kindly provide the secrets for the database and Auth0 configurations `.env` file of the [backend](./backend/.env.example) folder. 
 
 ## Full Stack Nano - IAM Final Project
 
