@@ -139,9 +139,6 @@ def update_drink(payload, drink_id):
     check_if_drink_exists(drink)
     body = request.get_json()
 
-    if 'title' and 'recipe' not in body:
-        abort(422)
-
     try:
         drink.title = body.get("title", None)
         drink.recipe = json.dumps(body.get("recipe", None))
@@ -217,6 +214,13 @@ def unprocessable(error):
     error handler should conform to general task above
 '''
 
+@app.errorhandler(400)
+def bad_request(error):
+    return jsonify({
+        "success": False, 
+        "error": 400, 
+        "message": "bad request"
+    }), 400
 
 @app.errorhandler(404)
 def not_found(error):
@@ -226,7 +230,29 @@ def not_found(error):
         "message": "resource not found"
     }), 404
 
+@app.errorhandler(405)
+def method_not_allowed(error):
+    return jsonify({
+        "success": False, 
+        "error": 405, 
+        "message": "method not allowed"
+    }), 405
 
+@app.errorhandler(405)
+def method_not_allowed(error):
+    return jsonify({
+        "success": False, 
+        "error": 405, 
+        "message": "method not allowed"
+    }), 405
+
+@app.errorhandler(500)
+def internal_server_error(error):
+    return jsonify({
+        "success": False, 
+        "error": 500, 
+        "message": "internal server error"
+    }), 500
 '''
 @TODO implement error handler for AuthError
     error handler should conform to general task above
