@@ -1,5 +1,9 @@
 # Coffee Shop Full Stack
 
+### Important For Reviewer
+
+Kindly provide the secrets for the database and Auth0 configurations `.env` file of the [backend](./backend/.env) folder. 
+
 ## Full Stack Nano - IAM Final Project
 
 Udacity has decided to open a new digitally enabled cafe for students to order drinks, socialize, and study hard. But they need help setting up their menu experience.
