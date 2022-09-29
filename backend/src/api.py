@@ -26,6 +26,13 @@ class AuthError(Exception):
 '''
 db_drop_and_create_all()
 
+# CORS headers implementation
+@app.after_request
+def after_request(response):
+    response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization,true')
+    response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS')
+    return response
+
 # Function for returning all drinks from the `drink` table with the long format representation. 
 def get_long_drinks():
     return [drink.long() for drink in Drink.query.all()]

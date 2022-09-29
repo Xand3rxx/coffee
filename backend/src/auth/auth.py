@@ -1,6 +1,6 @@
 import os
 import json
-from flask import request, _request_ctx_stack
+from flask import request, _request_ctx_stack, abort
 from functools import wraps
 from jose import jwt
 from urllib.request import urlopen
@@ -96,7 +96,9 @@ def check_permissions(permission, payload):
             'code': 'unauthorized',
             'description': 'Permission not found.'
         }, 403)
+
     return True
+
 # def check_permissions(permission, payload):
     # raise Exception('Not Implemented')
 
@@ -190,9 +192,19 @@ def requires_auth(permission=''):
         @wraps(f)
         def wrapper(*args, **kwargs):
             token = get_token_auth_header()
-            payload = verify_decode_jwt(token)
-            check_permissions(permission, payload)
-            return f(payload, *args, **kwargs)
 
+            # Check if payload has a valid token and is formmated correctly
+            try:
+                payload = verify_decode_jwt(token)
+            except AuthError as error:
+                abort(error.status_code)
+
+            # Check for the appropriate user permissions
+            try:
+                check_permissions(permission, payload)
+            except AuthError as error:
+                abort(error.status_code)
+
+            return f(payload, *args, **kwargs)
         return wrapper
     return requires_auth_decorator
